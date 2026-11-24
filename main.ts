@@ -23,6 +23,12 @@ if (length < 1 || length > MAX_CHARS) {
 if (ENTRY.trim().length === 0) {
   throw new Error("entry must not be only white space");
 }
+if (/[\r\n]/.test(ENTRY)) {
+  throw new Error("entry must be a single line (no CR or LF)");
+}
+if (/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/.test(ENTRY)) {
+  throw new Error("entry must not contain control characters");
+}
 
 mkdirSync("/output", { recursive: true });
 writeFileSync("/output/entry.txt", ENTRY, "utf8");
